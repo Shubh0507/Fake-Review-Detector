@@ -16,7 +16,7 @@ nltk.download('wordnet', quiet=True)
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
-st.set_page_config(page_title="Fake Review Detector", page_icon="🔍", layout="wide")
+st.set_page_config(page_title="ReviewLens", page_icon="🔍", layout="wide")
 
 
 @st.cache_resource
@@ -29,6 +29,7 @@ def load_models():
     svm_results = pickle.load(open("saved_models/svm_results.pkl", "rb"))
     rf_results = pickle.load(open("saved_models/rf_results.pkl", "rb"))
     y_test = np.load("data/y_test.npy")
+
     return vectorizer, nb_model, svm_model, log_odds, nb_results, svm_results, rf_results, y_test
 
 vectorizer, nb_model, svm_model, log_odds, nb_results, svm_results, rf_results, y_test = load_models()
@@ -109,8 +110,6 @@ with st.sidebar:
         "Rnd Forest": ["88.12%", "0.9518", "87.50%", "88.75%"],
     }
     st.dataframe(pd.DataFrame(perf_data), hide_index=True, use_container_width=True)
-    st.markdown("---")
-    st.caption("Dataset: Ott et al. Deceptive Opinion Spam (2011)\n1,600 hotel reviews · 800 fake · 800 real")
 
 
 tab1, tab2 = st.tabs(["🔍 Detector", "📊 Model Comparison"])
@@ -118,8 +117,8 @@ tab1, tab2 = st.tabs(["🔍 Detector", "📊 Model Comparison"])
 
 # Tab 1 — Detector
 with tab1:
-    st.title("🔍 Fake Review Detector")
-    st.markdown("*Trained on 1,600 Chicago hotel reviews. Paste any review to analyze it.*")
+    st.title("🔍 ReviewLens")
+    st.markdown("*Paste any review to analyze it.*")
 
     example_fake = """This hotel was absolutely amazing! The staff was incredibly wonderful and
 the rooms were perfect and luxurious. Best hotel in Chicago by far! I will definitely
@@ -214,7 +213,6 @@ Booked through Priceline, got a decent rate. Would probably stay again for the p
 # Tab 2 — Model Comparison
 with tab2:
     st.title("📊 Model Comparison")
-    st.markdown("Full evaluation of all three models on the 320-review held-out test set.")
 
     st.subheader("ROC Curves")
     fig_roc, ax = plt.subplots(figsize=(8, 5))
