@@ -9,26 +9,38 @@ import matplotlib
 matplotlib.use('Agg')
 import seaborn as sns
 from sklearn.metrics import roc_curve, auc, confusion_matrix
+from pathlib import Path
 
-nltk.download('stopwords', quiet=True)
-nltk.download('wordnet', quiet=True)
+# nltk.download('stopwords', quiet=True)
+# nltk.download('wordnet', quiet=True)
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 
 st.set_page_config(page_title="ReviewLens", page_icon="🔍", layout="wide")
 
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_DIR = BASE_DIR / "saved_models"
+DATA_DIR = BASE_DIR / "data"
+
 
 @st.cache_resource
 def load_models():
-    vectorizer = pickle.load(open("saved_models/tfidf_vectorizer.pkl", "rb"))
-    nb_model = pickle.load(open("saved_models/nb_model.pkl", "rb"))
-    svm_model = pickle.load(open("saved_models/svm_model.pkl", "rb"))
-    log_odds = pickle.load(open("saved_models/log_odds.pkl", "rb"))
-    nb_results = pickle.load(open("saved_models/nb_results.pkl", "rb"))
-    svm_results = pickle.load(open("saved_models/svm_results.pkl", "rb"))
-    rf_results = pickle.load(open("saved_models/rf_results.pkl", "rb"))
-    y_test = np.load("data/y_test.npy")
+    with open(MODEL_DIR / "tfidf_vectorizer.pkl", "rb") as f:
+        vectorizer = pickle.load(f)
+    with open(MODEL_DIR / "nb_model.pkl", "rb") as f:
+        nb_model = pickle.load(f)
+    with open(MODEL_DIR / "svm_model.pkl", "rb") as f:
+        svm_model = pickle.load(f)
+    with open(MODEL_DIR / "log_odds.pkl", "rb") as f:
+        log_odds = pickle.load(f)
+    with open(MODEL_DIR / "nb_results.pkl", "rb") as f:
+        nb_results = pickle.load(f)
+    with open(MODEL_DIR / "svm_results.pkl", "rb") as f:
+        svm_results = pickle.load(f)
+    with open(MODEL_DIR / "rf_results.pkl", "rb") as f:
+        rf_results = pickle.load(f)
+    y_test = np.load(DATA_DIR / "y_test.npy")
 
     return vectorizer, nb_model, svm_model, log_odds, nb_results, svm_results, rf_results, y_test
 
