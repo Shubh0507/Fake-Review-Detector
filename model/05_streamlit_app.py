@@ -11,8 +11,8 @@ import seaborn as sns
 from sklearn.metrics import roc_curve, auc, confusion_matrix
 from pathlib import Path
 
-# nltk.download('stopwords', quiet=True)
-# nltk.download('wordnet', quiet=True)
+nltk.download('stopwords')
+nltk.download('wordnet')
 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
